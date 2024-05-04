@@ -2,18 +2,22 @@ package io.collective;
 
 import java.time.Clock;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
 
 public class SimpleAgedCache {
-    private Clock clock; //similar to a self.__var uder def__init__(self) in py
-    private MAP<Object, Object> cache; //dict in py
-    private MAP<Object, Long> expirations; //retension in ms goes up to 4000 only but then clock.millis is a long type
-
+    private Clock clock;
+    private Map<Object, Object> cache;
+    private Map<Object, Long> expirations;
 
     public SimpleAgedCache(Clock clock) {
-        this.clock = clock; //init the clock with clock param, this = similar to self in py
+        this.clock = clock;
+        this.cache = new HashMap<>();
+        this.expirations = new HashMap<>();
     }
 
     public SimpleAgedCache() {
+        this.clock = Clock.systemDefaultZone();
         this.cache = new HashMap<>();
         this.expirations = new HashMap<>();
     }
@@ -24,16 +28,32 @@ public class SimpleAgedCache {
     }
 
     public boolean isEmpty() {
-        return cache.isEmpty(); //map has an inbuilt isEmpty() method
+        return cache.isEmpty();
     }
 
     public int size() {
-        return cache.size() //map has an inbuilt size() method 
+        long currentTime = clock.millis();
+        Iterator<Map.Entry<Object, Long>> it = expirations.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Object, Long> entry = it.next();
+            if (entry.getValue() < currentTime) {
+                cache.remove(entry.getKey());
+                it.remove();
+            }
+        }
+        return cache.size();
     }
 
     public Object get(Object key) {
-        Object val = cache.get(key)
-        return val;
-    }
-}
+        Object value = cache.get(key);
+        Long expirationTime = expirations.get(key);
 
+        if (value != null && expirationTime != null && expirationTime < clock.millis()) {
+            cache.remove(key);
+            expirations.remove(key);
+            return null;
+            } else {
+                return value;
+            }
+        }
+    }
