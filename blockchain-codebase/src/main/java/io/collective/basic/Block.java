@@ -15,7 +15,7 @@ public class Block {
     private final String previousHash;
     private final long timestamp;
     private final int nonce;
-    private final String hash;
+    private String hash;
 
     public Block(String previousHash, long timestamp, int nonce) throws NoSuchAlgorithmException {
         this.previousHash = previousHash;
@@ -23,6 +23,7 @@ public class Block {
         this.nonce = nonce;
         this.hash = calculateHash();
     }
+
 
     public String getPreviousHash() {
         return previousHash;
@@ -52,18 +53,4 @@ public class Block {
         return String.format("%064x", new BigInteger(1, digest.digest()));
     }
 }
-//     public String calculatedHash() throws NoSuchAlgorithmException {
-//         ///concatenating the 3 before passing to calculatehash block 
-//         ///throw exception if sha-256 not supported
-//         String string = previousHash + timestamp + nonce;
-//         return computeHash(string);
-//     }
-    
 
-//     static String computeHash(String string) throws NoSuchAlgorithmException {
-//         /// change method name for clarity 
-//         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-//         digest.update(string.getBytes());
-//         return String.format("%064x", new BigInteger(1, digest.digest()));
-//     }
-// }
