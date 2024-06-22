@@ -19,7 +19,5 @@ Thanks, @barinek
 
 
 Remove-Item -Path .\build -Recurse -Force
-
-sudo rm -rf ./build
 ./gradlew clean build --no-build-cache
 

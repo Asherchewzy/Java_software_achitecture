@@ -29,29 +29,27 @@ public class Blockchain {
             return true;
         }
 
-        Block previousBlock = chain.get(0);
         for (int i = 1; i < chain.size(); i++) {
-            //skip first block since there isnt a prev block to compare to
-            // loop the rest
-
+            Block previousBlock = chain.get(i-1);
             Block currentBlock = chain.get(i);
-            
 
-            //current hash correctly calculated
-            if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
-                return false;
-            }
-
-
-            //previous hash match
-            if (!currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
-                return false;
-            }
-
-            //check if block is mined (below it checks if it starts with 00)
             if (!isMined(currentBlock)) {
                 return false;
             }
+
+            //current hash correctly calculated
+            
+            String cb_string = currentBlock.getPreviousHash() + currentBlock.getTimestamp() + currentBlock.getNonce();
+            String cb_hash = Block.calculatedHash(cb_string);
+
+            if (!currentBlock.getHash().equals(cb_hash)) {
+                return false;
+            }
+
+            if (!currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
+                return false;
+            }
+            
             previousBlock = currentBlock;
         }
         return true; 

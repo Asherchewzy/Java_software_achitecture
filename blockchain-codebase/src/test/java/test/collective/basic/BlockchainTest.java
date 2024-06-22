@@ -56,7 +56,7 @@ public class BlockchainTest {
         assertTrue(one.isValid());
         assertTrue(many.isValid());
     }
-
+    //FAILED
     @Test
     public void isNotValid_whenOneIsNotMined() throws NoSuchAlgorithmException {
         Block genesis = new Block("0", Instant.now().getEpochSecond(), 0);
@@ -90,7 +90,7 @@ public class BlockchainTest {
 
         assertFalse(notValid.isValid());
     }
-
+    //FAILED
     @Test
     public void isValid_HashIncorrect() throws NoSuchAlgorithmException, NoSuchFieldException, IllegalAccessException {
         Blockchain invalid = new Blockchain();
